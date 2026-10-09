@@ -1,0 +1,32 @@
+name: Build NeonBlock3DS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkitarm:latest
+      options: --user 1001
+    steps:
+      - name: Get source
+        uses: actions/checkout@v4
+
+      - name: Install Citro2D dependency
+        run: |
+          sudo dkp-pacman -Sy --noconfirm 3ds-citro2d
+
+      - name: Compile homebrew
+        run: |
+          make clean || true
+          make -j2
+
+      - name: Upload 3DSX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NeonBlock3DS-3dsx
+          path: NeonBlock3DS.3dsx
+          if-no-files-found: error
