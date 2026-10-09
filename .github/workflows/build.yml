@@ -3,21 +3,21 @@ name: Build NeonBlock3DS
 on:
   workflow_dispatch:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     container:
       image: devkitpro/devkitarm:latest
-      options: --user 1001
+
     steps:
       - name: Get source
         uses: actions/checkout@v4
 
       - name: Install Citro2D dependency
         run: |
-          sudo dkp-pacman -Sy --noconfirm 3ds-citro2d
+          dkp-pacman -Sy --noconfirm 3ds-citro2d
 
       - name: Compile homebrew
         run: |
